@@ -33,4 +33,4 @@ msc01_bbm <- fit_BBM(
 
 # save model fit
 rds_fname <- file.path(dir_output, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
-
+saveRDS(msc01_bbm, rds_fname)

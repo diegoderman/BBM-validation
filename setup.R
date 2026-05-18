@@ -1,25 +1,15 @@
-# install.packages("devtools")
-# install.packages("gsignal")
-# install.packages("ggcorrplot")
-# install.packages("ciftiTools")            
-# devtools::install_github("mandymejia/fMRIscrub", "14.0")          
-# install.packages("fMRItools") # deprecated for new BBM
-# devtools::install_github("mandymejia/fMRItools", "7.0", force=TRUE)
-# install.packages("viridis")
-# install.packages("BayesBrainMap")
-# install.packages("doParallel")
-# devtools::install_github("diegoderman/BayesBrainMap", ref = "2.0")
+# renv::install("ciftiTools")            
+# renv::install("mandymejia/fMRIscrub@14.0")        
+# renv::install("mandymejia/fMRItools@7.0")
+# renv::install("mandymejia/BayesBrainMap@2.0")
+# renv::install("doParallel")
 
 # Load packages
-library(ggcorrplot)      # version 0.1.4.1
-library(gsignal)         # version 0.3.7
 library(ciftiTools)      # version 0.17.4
 library(fMRIscrub)       # version 0.14.7
-library(viridis)         # version 0.6.5
 library(BayesBrainMap)   # version: 0.2.0
-library(tidyverse)       # version: 2.0.0
-library(purrr)           # version: 0.2.0
 library("doParallel")
+#renv::snapshot()
 
 # DEFINITIONS
 TR_MSC <- 2.2
@@ -32,6 +22,9 @@ MACPRO <- FALSE
 if (grepl("quartz.uits.iu.edu$", Sys.info()[["nodename"]])){
   IU_HPC <- TRUE 
   hostname <- "quartz"
+} else if (grepl("red.uits.iu.edu$", Sys.info()[["nodename"]])){
+  quartz <- TRUE
+  hostname <- "quartz"
 } else if (Sys.info()[["sysname"]] == "Darwin"){
   MACPRO <- TRUE
   hostname <- "macpro"
@@ -40,7 +33,10 @@ if (grepl("quartz.uits.iu.edu$", Sys.info()[["nodename"]])){
 }
 
 # Set CIFTI Workbench path
-wb_path <- "~/workbench-linux64-v2.1.0/workbench/bin_linux64" # Path to Workbench command, e.g. "~/workbench-command" or "C:/path/to/workbench-command.exe"
+wb_path <- switch(hostname,
+                   "macpro" = "~/Downloads/workbench/bin_macos64", # Path to Slate project on IU HPC
+                   "quartz" = "~/Downloads/workbench/bin_rh_linux64", # Path to Slate project on mac pro
+                   "~/workbench-linux64-v2.1.0/workbench/bin_linux64") # Default path to Slate
 # Check if the path exists, otherwise throw an error
 if (!file.exists(wb_path)) {
   stop(paste("Workbench path does not exist:", wb_path))
