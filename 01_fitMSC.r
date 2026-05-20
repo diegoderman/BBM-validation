@@ -35,7 +35,7 @@ for (subid in subjects) {
       usePar = nThreads)
     
     # save model fit
-    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM-rds/fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
     saveRDS(msc01_bbm, rds_fname)
 
   }
