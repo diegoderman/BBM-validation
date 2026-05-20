@@ -15,7 +15,7 @@ for (subid in subjects) {
     print(paste("Processing subject", subid, "session", sesid))
 
     # Define output dir
-    dir_output_sub <- file.path(dir_output, paste0("sub-", subid))
+    dir_output_sub <- file.path(dir_output, "fit_BBM-rds", paste0("sub-", subid))
 
     # load preprocessed bold timeseries
     cifti_fname <- file.path(dir_msc, paste0("sub-", subid, "/processed_restingstate_timecourses/ses-", sesid, "/cifti"),
@@ -35,7 +35,7 @@ for (subid in subjects) {
       usePar = nThreads)
     
     # save model fit
-    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM-rds/fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
     saveRDS(msc01_bbm, rds_fname)
 
   }
