@@ -55,5 +55,5 @@ dir_base <- switch(hostname,
 
 # set up derived paths
 dir_priors <- file.path(dir_base, "priors") # Path to priors folder
-dir_output <- file.path(dir_base, "BBM-validation", "output") # Path to output folder
+dir_output <- file.path(dir_base, "BBM-validation") # Path to output folder
 dir_msc <- file.path(dir_base, "MSC/derivatives/surface_pipeline")

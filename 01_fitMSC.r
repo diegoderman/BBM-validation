@@ -20,22 +20,23 @@ for (subid in subjects) {
     # load preprocessed bold timeseries
     cifti_fname <- file.path(dir_msc, paste0("sub-", subid, "/processed_restingstate_timecourses/ses-", sesid, "/cifti"),
                              paste0("sub-", subid, "_ses-", sesid, "_task-rest_bold_32k_fsLR.dtseries.nii"))
-    bold_cifti <- read_cifti(cifti_fname)
-    
+    #bold_cifti <- read_cifti(cifti_fname)
+
     # plot mean time series of bold
-    msc01_bbm <- fit_BBM(
-      BOLD = bold_cifti,
-      prior = prior_msc,
-      var_method = method_variance,
-      method_FC = method_FC,
-      TR = TR_MSC,
-      drop_first = 5,
-      GSR = FALSE,
-      scrub = FALSE,
-      usePar = nThreads)
+    #msc01_bbm <- fit_BBM(
+    #  BOLD = bold_cifti,
+    #  prior = prior_msc,
+    #  var_method = method_variance,
+    #  method_FC = method_FC,
+    #  TR = TR_MSC,
+    #  drop_first = 5,
+    #  GSR = FALSE,
+    #  scrub = FALSE,
+    #  usePar = nThreads)
     
     # save model fit
     rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+
     saveRDS(msc01_bbm, rds_fname)
 
   }
