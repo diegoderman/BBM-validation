@@ -1,5 +1,8 @@
 #parameters.r
 
+# Definitions
+nThreads <- FALSE
+
 template = "MSC"
 gsr_bool = FALSE
 method_variance = "non-negative"
@@ -12,3 +15,7 @@ if (gsr_bool == TRUE) {
 } else {
   gsr = "noGSR"
 }
+
+# define subjects and sessions
+subjects <- sprintf("MSC%02d", 1:10 )
+sessions <- sprintf("func%02d", 1:10 )
