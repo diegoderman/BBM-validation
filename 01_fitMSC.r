@@ -23,16 +23,16 @@ for (subid in subjects) {
     #bold_cifti <- read_cifti(cifti_fname)
 
     # plot mean time series of bold
-    #msc01_bbm <- fit_BBM(
-    #  BOLD = bold_cifti,
-    #  prior = prior_msc,
-    #  var_method = method_variance,
-    #  method_FC = method_FC,
-    #  TR = TR_MSC,
-    #  drop_first = 5,
-    #  GSR = FALSE,
-    #  scrub = FALSE,
-    #  usePar = nThreads)
+    msc01_bbm <- fit_BBM(
+      BOLD = bold_cifti,
+      prior = prior_msc,
+      var_method = method_variance,
+      method_FC = method_FC,
+      TR = TR_MSC,
+      drop_first = 5,
+      GSR = FALSE,
+      scrub = FALSE,
+      usePar = nThreads)
     
     # save model fit
     rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
