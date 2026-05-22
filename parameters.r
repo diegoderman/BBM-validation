@@ -4,7 +4,7 @@
 nThreads <- FALSE
 
 template = "MSC"
-gsr_bool = FALSE
+gsr_bool = TRUE
 method_variance = "non-negative"
 method_variance <- "non-negative"
 method_FC <- "VB1"
