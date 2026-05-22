@@ -42,14 +42,14 @@ for (subid in subjects) {
     # debug, load rds 
     #msc01_bbm <- readRDS(file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds")))
     # save model fit
-    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+    rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_ses-", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
     msc01_bbm <- readRDS(rds_fname)
     #saveRDS(msc01_bbm, rds_fname)
     
     # save mean spatial map on project directory for quick visualization.
     meanmap_dir <- file.path(".", "output", "rds", subid)
     dir.create(meanmap_dir, showWarnings = FALSE, recursive = TRUE)
-    meanmap_fname <- file.path(meanmap_dir, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+    meanmap_fname <- file.path(meanmap_dir, paste0("fit_BBM_", subid, "_ses-", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
     saveRDS(msc01_bbm$subjNet_mean, meanmap_fname)
     
   }
