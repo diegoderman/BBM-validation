@@ -28,23 +28,22 @@ for (subid in subjects) {
     #bold_cifti <- read_cifti(cifti_fname)
      
     # plot mean time series of bold
-    # msc01_bbm <- fit_BBM(
-    #   BOLD = bold_cifti,
-    #   prior = prior_msc,
-    #   var_method = method_variance,
-    #   method_FC = method_FC,
-    #   TR = TR_MSC,
-    #   drop_first = 5,
-    #   GSR = FALSE,
-    #   scrub = FALSE,
-    #   usePar = nThreads)
+    msc01_bbm <- fit_BBM(
+      BOLD = bold_cifti,
+      prior = prior_msc,
+      var_method = method_variance,
+      method_FC = method_FC,
+      TR = TR_MSC,
+      drop_first = 5,
+      GSR = FALSE, # GSR is already applied to the MSC data.
+      scrub = FALSE,
+      usePar = nThreads)
     
     # debug, load rds 
-    #msc01_bbm <- readRDS(file.path(dir_output_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds")))
-    # save model fit
     rds_fname <- file.path(dir_output_sub, paste0("fit_BBM_", subid, "_ses-", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
-    msc01_bbm <- readRDS(rds_fname)
-    #saveRDS(msc01_bbm, rds_fname)
+    #msc01_bbm <- readRDS(rds_fname)
+    # save model fit
+    saveRDS(msc01_bbm, rds_fname)
     
     # save mean spatial map on project directory for quick visualization.
     meanmap_dir <- file.path(".", "output", "rds", subid)
