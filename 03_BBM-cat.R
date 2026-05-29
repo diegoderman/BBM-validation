@@ -51,8 +51,19 @@ for (subid in subjects) {
                                paste0("fit_BBM_", subid, "_ses-", parity, "_",
                                       method_variance, "_", method_FC, "_", gsr, ".rds"))
 
-    # skip if both outputs already exist
-    if (file.exists(rds_fname) && file.exists(meanmap_fname)) {
+    # cifti output (mean spatial map as a CIFTI, in a cifti subdirectory of dir_output)
+    dir_cifti_sub <- file.path(dir_output, "cifti", paste0("sub-", subid))
+    dir.create(dir_cifti_sub, showWarnings = FALSE, recursive = TRUE)
+    cifti_fname <- file.path(dir_cifti_sub,
+                             paste0("fit_BBM_", subid, "_ses-", parity, "_",
+                                    method_variance, "_", method_FC, "_", gsr, "_mean.dscalar.nii"))
+    cifti_fname_sd <- file.path(dir_cifti_sub,
+                                paste0("fit_BBM_", subid, "_ses-", parity, "_",
+                                       method_variance, "_", method_FC, "_", gsr, "_sd.dscalar.nii"))
+
+    # skip if all outputs already exist
+    if (file.exists(rds_fname) && file.exists(meanmap_fname) &&
+        file.exists(cifti_fname) && file.exists(cifti_fname_sd)) {
       print(paste("  Outputs exist, skipping."))
       next
     }
@@ -72,5 +83,9 @@ for (subid in subjects) {
     # save full fit and mean spatial map
     saveRDS(msc_bbm, rds_fname)
     saveRDS(msc_bbm$subjNet_mean, meanmap_fname)
+
+    # write mean and SD spatial maps as CIFTI
+    write_cifti(msc_bbm$subjNet_mean, cifti_fname)
+    write_cifti(msc_bbm$subjNet_se, cifti_fname_sd)
   }
 }
