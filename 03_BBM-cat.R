@@ -59,7 +59,7 @@ for (subid in subjects) {
 
     # fit BBM on the list of session CIFTIs; BayesBrainMap handles concatenation
     msc_bbm <- fit_BBM(
-      BOLD = as.list(cifti_fnames),
+      BOLD = cifti_fnames,
       prior = prior_msc,
       var_method = method_variance,
       method_FC = method_FC,

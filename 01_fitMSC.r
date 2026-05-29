@@ -25,7 +25,7 @@ for (subid in subjects) {
     # load preprocessed bold timeseries
     cifti_fname <- file.path(dir_msc, paste0("sub-", subid, "/processed_restingstate_timecourses/ses-", sesid, "/cifti"),
                              paste0("sub-", subid, "_ses-", sesid, "_task-rest_bold_32k_fsLR.dtseries.nii"))
-    #bold_cifti <- read_cifti(cifti_fname)
+    bold_cifti <- read_cifti(cifti_fname)
      
     # plot mean time series of bold
     msc01_bbm <- fit_BBM(
