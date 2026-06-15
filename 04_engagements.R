@@ -34,10 +34,10 @@ for (subid in subjects) {
     
     
     # Define output dir
-    dir_input_sub <- file.path(dir_output, paste0("sub-", subid))
+    dir_input_sub <- file.path(dir_output, paste0("fit_BBM-rds/sub-", subid))
     
     # load FC estimates
-    rds_fname <- file.path(dir_input_sub, paste0("fit_BBM_", subid, "_", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
+    rds_fname <- file.path(dir_input_sub, paste0("fit_BBM_", subid, "_ses-", sesid, "_", method_variance, "_", method_FC, "_", gsr, ".rds"))
     msc01_bbm <- readRDS(rds_fname)
 
     # Calculate engagements for all networks
@@ -62,7 +62,7 @@ for (subid in subjects) {
     
     # Save engagement map at Z>1 for comparison between sessions
 
-    subject_engagements[[sesid]] <- engagements(bMap, z = 1, method_p = "bonferroni")
+    #subject_engagements[[sesid]] <- engagements(bMap, z = 1, method_p = "bonferroni")
 
     
   }

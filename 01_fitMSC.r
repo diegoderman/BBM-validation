@@ -7,7 +7,7 @@ source("./setup.R")
 source("./parameters.r")
 
 # load prior
-#prior_msc <- readRDS(file.path(dir_priors, template, paste0("prior_combined_", template, "_", gsr, ".rds")))
+prior_msc <- readRDS(file.path(dir_priors, template, paste0("prior_combined_", template, "_", gsr, ".rds")))
 
 # for subjects and sessions
 # debugging
