@@ -13,6 +13,7 @@ library("doParallel")
 
 # DEFINITIONS
 TR_MSC <- 2.2
+Q <- 17 # number of independent components (networks) from the priors After removing the first (medial wall) component from the MSC template.
 
 # Define hostname and system information
 # initialize
