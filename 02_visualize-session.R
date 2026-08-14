@@ -1,10 +1,10 @@
 # create png visualization files from BBM RDS files.
 
+# load parameters (must precede setup.R -- setup.R reads bold_scaling)
+source("./parameters.R")
+
 # load packages
 source("./setup.R")
-
-# load parameters
-source("./parameters.R")
 
 # for each subject and session, load the fitted BBM model and create visualizations
 # for subjects and sessions
@@ -13,8 +13,8 @@ for (subid in subjects) {
     print(paste("Processing subject", subid, "session", sesid))
     
     # Define output dir
-    dir_input_sub <- normalizePath(file.path(".", "output", "rds", subid))
-    dir_output_sub <- normalizePath(file.path("./output/png", paste0("sub-",subid)))
+    dir_input_sub  <- normalizePath(file.path(".", paste0("output", bold_suffix), "rds", subid))
+    dir_output_sub <- normalizePath(file.path(".", paste0("output", bold_suffix), "png", paste0("sub-", subid)))
     
     # create output dir
     dir.create(dir_output_sub, showWarnings = FALSE, recursive = TRUE)

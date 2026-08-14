@@ -1,10 +1,10 @@
 # create png visualization files from BBM RDS files.
 
+# load parameters (must precede setup.R -- setup.R reads bold_scaling)
+source("./parameters.R")
+
 # load packages
 source("./setup.R")
-
-# load parameters
-source("./parameters.R")
 
 # Define output dir for engagement maps
 dir_output_engagements <- file.path(dir_output, "engagement_maps-png")

@@ -2,22 +2,38 @@
 # Concatenation is delegated to BayesBrainMap by passing a list of BOLDs
 # (CIFTI file paths) to fit_BBM rather than concatenating manually.
 
+# all definitions in parameters (must precede setup.R -- setup.R reads bold_scaling)
+source("./parameters.R")
+
 # source setup script, which loads libraries and paths
 source("./setup.R")
 
-# all definitions in parameters
-source("./parameters.r")
+# load prior (mean vs sd BOLD-scaling variant, matches 01_fitMSC.r)
+prior_msc_fname <- ifelse(bold_scaling == "mean",
+                          file.path(dir_priors, template, paste0("prior_combined_", template, "_", gsr, ".rds")),
+                          file.path(dir_priors, template, paste0("prior_combined_", template, "_", gsr, "_sd.rds")))
+prior_msc <- readRDS(prior_msc_fname)
 
-# load prior
-prior_msc <- readRDS(file.path(dir_priors, template, paste0("prior_combined_", template, "_", gsr, ".rds")))
-
-# odd/even session groupings (func01..func10 -> odd: 1,3,5,7,9; even: 2,4,6,8,10)
+# session groupings. The list name becomes the parity tag in the output filenames
+# (fit_BBM_<sub>_ses-<parity>_...), so keep them filesystem-safe.
 session_groups <- list(
-  odd  = sprintf("func%02d", seq(1, 10, by = 2)),
-  even = sprintf("func%02d", seq(2, 10, by = 2))
+  odd   = sprintf("func%02d", seq(1, 10, by = 2)),
+  even  = sprintf("func%02d", seq(2, 10, by = 2)),
+  `2ses` = c("func02", "func10"),
+  `3ses` = c("func04", "func08", "func02"),
+  `4ses` = c("func06", "func08", "func10", "func04")
 )
 
 for (subid in subjects) {
+
+  subid_str <- paste0("sub-", subid)
+
+  # per-subject midthickness surfaces used by smooth_cifti (analogous to 01_fitMSC.r)
+  midthicknessL_fname <- file.path(dir_msc, subid_str, "fs_LR_Talairach", "fsaverage_LR32k",
+                                   paste0(subid, ".L.midthickness.32k_fs_LR.surf.gii"))
+  midthicknessR_fname <- file.path(dir_msc, subid_str, "fs_LR_Talairach", "fsaverage_LR32k",
+                                   paste0(subid, ".R.midthickness.32k_fs_LR.surf.gii"))
+
   for (parity in names(session_groups)) {
     ses_ids <- session_groups[[parity]]
     print(paste("Processing subject", subid, "parity", parity,
@@ -45,7 +61,7 @@ for (subid in subjects) {
                            paste0("fit_BBM_", subid, "_ses-", parity, "_",
                                   method_variance, "_", method_FC, "_", gsr, ".rds"))
 
-    meanmap_dir <- file.path(".", "output", "rds", subid)
+    meanmap_dir <- file.path(".", paste0("output", bold_suffix), "rds", subid)
     dir.create(meanmap_dir, showWarnings = FALSE, recursive = TRUE)
     meanmap_fname <- file.path(meanmap_dir,
                                paste0("fit_BBM_", subid, "_ses-", parity, "_",
@@ -68,9 +84,18 @@ for (subid in subjects) {
       next
     }
 
+    # read + smooth each session CIFTI, then pass the list of smoothed xiftis
+    # to fit_BBM (BayesBrainMap concatenates internally). Smoothing matches
+    # 01_fitMSC.r: FWHM 5 mm on surface and volume with the subject's midthickness.
+    bold_ciftis_s <- lapply(cifti_fnames, function(fn) {
+      smooth_cifti(read_cifti(fn), surf_FWHM = 5, vol_FWHM = 5,
+                   surfL_fname = midthicknessL_fname,
+                   surfR_fname = midthicknessR_fname)
+    })
+
     # fit BBM on the list of session CIFTIs; BayesBrainMap handles concatenation
     msc_bbm <- fit_BBM(
-      BOLD = cifti_fnames,
+      BOLD = bold_ciftis_s,
       prior = prior_msc,
       var_method = method_variance,
       method_FC = method_FC,
@@ -82,10 +107,10 @@ for (subid in subjects) {
 
     # save full fit and mean spatial map
     saveRDS(msc_bbm, rds_fname)
-    saveRDS(msc_bbm$subjNet_mean, meanmap_fname)
+    #saveRDS(msc_bbm$subjNet_mean, meanmap_fname)
 
     # write mean and SD spatial maps as CIFTI
     write_cifti(msc_bbm$subjNet_mean, cifti_fname)
-    write_cifti(msc_bbm$subjNet_se, cifti_fname_sd)
+    #write_cifti(msc_bbm$subjNet_se, cifti_fname_sd)
   }
 }

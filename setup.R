@@ -3,11 +3,24 @@
 # renv::install("mandymejia/fMRItools@7.0")
 # renv::install("mandymejia/BayesBrainMap@2.0")
 # renv::install("doParallel")
+# renv::install("mandymejia/BayesBrainMap@3.0", library = "renv/library-bbm/3.0")
+# renv::install("mandymejia/BayesBrainMap@2.0", library = "renv/library-bbm/2.0")
+
+bbm_lib <- if (bold_scaling == "mean") "renv/library-bbm/3.0" else "renv/library-bbm/2.0"
+.libPaths(c(bbm_lib, .libPaths()))                      # BBM from target, deps from main
+library(BayesBrainMap)
+
+stopifnot(
+  "BayesBrainMap loaded from the wrong library" =
+    identical(
+      normalizePath(dirname(find.package("BayesBrainMap")), winslash = "/", mustWork = TRUE),
+      normalizePath(bbm_lib,                                winslash = "/", mustWork = TRUE)
+    )
+)
 
 # Load packages
 library(ciftiTools)      # version 0.17.4
 library(fMRIscrub)       # version 0.14.7
-library(BayesBrainMap)   # version: 0.2.0
 library("doParallel")
 #renv::snapshot()
 
@@ -56,5 +69,9 @@ dir_base <- switch(hostname,
 
 # set up derived paths
 dir_priors <- file.path(dir_base, "priors") # Path to priors folder
-dir_output <- file.path(dir_base, "BBM-validation") # Path to output folder
+dir_output <- paste0(file.path(dir_base, "BBM-validation"), bold_suffix) # suffix _sd when bold_scaling != "mean"
 dir_msc <- file.path(dir_base, "MSC/derivatives/surface_pipeline")
+
+
+# set number of concurrent threads
+Sys.setenv("OMP_NUM_THREADS" = "10")
